@@ -29,7 +29,40 @@ await request('http://domain/api/', {
     },
 });
 
+// response:
+// {
+//     id: 1,
+//     result: {
+//         your_money: 4000000000000000000, 😁
+//     }
+// }
+//
+// or maybe:
+// {
+//     id: 1,
+//     error: {
+//         code: 500,
+//         message: 'you really want a lot',
+//         data: {
+//             your_money: '5$',
+//         },
+//     }
+// }
+
 await requests('http://domain/todos');
+
+// response
+// {
+//     id: '018c1b7d-0f42-0764-522b-6829727f48e3',
+//     result: [
+//         {
+//             title: 'todo 1',
+//         },
+//         {
+//             title: 'todo 2',
+//         },
+//     ];
+// }
 ```
 
 ## License
