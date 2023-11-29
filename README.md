@@ -24,8 +24,11 @@ type Params = {
 type Result = {
     your_money: number;
 };
+type ErrorData = {
+    your_money: number;
+};
 
-const result = await apiRequest<Params, Result>({
+const result = await apiRequest<Params, Result, ErrorData>({
     body: {
         id: 1,
         method: 'multiply_my_money',
@@ -55,7 +58,7 @@ console.log(result);
 //         code: 500,
 //         message: 'you really want a lot',
 //         data: {
-//             your_money: '5$',
+//             your_money: 5,
 //         },
 //     }
 // }
