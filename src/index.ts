@@ -1,5 +1,3 @@
-import { ulid } from '@budarin/ulid';
-
 export type DeepReadonly<T> = T extends (infer R)[]
     ? // eslint-disable-next-line no-use-before-define
       DeepReadonlyArray<R>
@@ -19,10 +17,10 @@ type DeepReadonlyObject<T> = {
 
 export type Url = string;
 
-export type JsonRpcRequest<T> = {
-    id: string;
+export type JsonRpcRequest<P> = {
+    id: string | number;
     method: string;
-    params: T;
+    params: P;
 };
 
 export type JsonRpcError<U> = {
@@ -34,12 +32,12 @@ export type JsonRpcError<U> = {
 
 export type JsonRpcResponse<T, U> =
     | {
-          id: string;
+          id: string | number;
           result: DeepReadonly<T>;
           error?: never;
       }
     | {
-          id: string;
+          id: string | number;
           result?: never;
           error: DeepReadonly<JsonRpcError<U>>;
       };
@@ -81,60 +79,51 @@ export function validateResponse<T, U>(data: any): data is JsonRpcResponse<T, U>
     return false;
 }
 
-export const request = async <T, U>(
-    input: Url,
-    options?: Omit<RequestInit, 'body'> & { body: JsonRpcRequest<T> },
-): Promise<JsonRpcResponse<T, U>> => {
-    const id = options ? options.body.id : ulid();
+export const createRequest =
+    (baseUrl: Url) =>
+    async <P, T, U = any>(
+        options: Omit<RequestInit, 'body' | 'method'> & { body: JsonRpcRequest<P> },
+    ): Promise<JsonRpcResponse<T, U>> => {
+        const id = options.body.id;
 
-    try {
-        let response: Response;
-
-        if (options) {
-            response = await fetch(input, {
+        try {
+            const response = await fetch(`${baseUrl}/${options.body.method}`, {
                 ...options,
+                method: 'POST',
                 body: JSON.stringify(options.body),
                 headers: {
                     ...options?.headers,
-                    [xRequestId]: id,
+                    [xRequestId]: String(id),
                     'content-type': appJson,
                     accept: appJson,
                 },
             });
-        } else {
-            response = await fetch(input, {
-                headers: {
-                    [xRequestId]: id,
-                    accept: appJson,
-                },
-            });
-        }
 
-        if (response.ok === false) {
+            if (response.ok === false) {
+                return {
+                    id,
+                    error: {
+                        code: response.status,
+                        message: response.statusText,
+                    },
+                };
+            }
+
+            const data = response.json();
+
+            if (!validateResponse<T, U>(data)) {
+                throw new Error('Структура данных в ответе сервера не соответствует формату JSON-RPC');
+            }
+
+            return data;
+        } catch (error) {
             return {
                 id,
                 error: {
-                    code: response.status,
-                    message: response.statusText,
+                    code: UNEXPECTED_ERROR_CODE,
+                    message: (error as Error).message,
+                    stack: (error as Error).stack,
                 },
             };
         }
-
-        const data = response.json();
-
-        if (!validateResponse<T, U>(data)) {
-            throw new Error('Структура данных в ответе сервера не соответствует формату JSON-RPC');
-        }
-
-        return data;
-    } catch (error) {
-        return {
-            id,
-            error: {
-                code: UNEXPECTED_ERROR_CODE,
-                message: (error as Error).message,
-                stack: (error as Error).stack,
-            },
-        };
-    }
-};
+    };

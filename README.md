@@ -13,21 +13,32 @@ yarn add @budarin/json-rpc-request
 ## Usage
 
 ```ts
-import { request } from '@budarin/json-rpc-request';
+import { createRequest } from '@budarin/json-rpc-request';
 
-await request('http://domain/api/', {
-    method: 'POST',
-    body: JSON.stringify({
+const baseApiUrl = 'http://domain/api';
+const apiRequest = createRequest(baseApiUrl);
+
+type Params = {
+    multiplier: number;
+};
+type Result = {
+    your_money: number;
+};
+
+const result = await apiRequest<Params, Result>({
+    body: {
         id: 1,
         method: 'multiply_my_money',
         params: {
             multiplier: 200,
         },
-    }),
+    },
     headers: {
         'Content-Type': 'application/json',
     },
 });
+
+console.log(result);
 
 // response:
 // {
@@ -47,21 +58,6 @@ await request('http://domain/api/', {
 //             your_money: '5$',
 //         },
 //     }
-// }
-
-await requests('http://domain/todos');
-
-// response
-// {
-//     id: '018c1b7d-0f42-0764-522b-6829727f48e3',
-//     result: [
-//         {
-//             title: 'todo 1',
-//         },
-//         {
-//             title: 'todo 2',
-//         },
-//     ];
 // }
 ```
 

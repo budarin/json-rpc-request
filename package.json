@@ -1,6 +1,6 @@
 {
   "name": "@budarin/json-rpc-request",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "repository": {
     "url": "git+https://github.com/budarin/json-rpc-request.git"
   },
@@ -21,8 +21,5 @@
     "prepublish": "npm run build",
     "npm-publish": "npm run build && npm publish",
     "upgrade deps": "yarn upgrade-interactive --latest;"
-  },
-  "dependencies": {
-    "@budarin/ulid": "^1.0.0"
   }
 }
