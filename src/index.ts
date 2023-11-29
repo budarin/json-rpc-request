@@ -32,7 +32,7 @@ export type JsonRpcError<U> = {
     stack?: string;
 };
 
-export type ResultOrError<T, U> =
+export type JsonRpcResponse<T, U> =
     | {
           id: string;
           result: DeepReadonly<T>;
@@ -62,7 +62,7 @@ export function isError<U>(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function validateResponse<T, U>(data: any): data is ResultOrError<T, U> {
+export function validateResponse<T, U>(data: any): data is JsonRpcResponse<T, U> {
     if (isResult<T>(data)) {
         return true;
     }
@@ -84,7 +84,7 @@ export function validateResponse<T, U>(data: any): data is ResultOrError<T, U> {
 export const request = async <T, U>(
     input: Url,
     options?: Omit<RequestInit, 'body'> & { body: JsonRpcRequest<T> },
-): Promise<ResultOrError<T, U>> => {
+): Promise<JsonRpcResponse<T, U>> => {
     const id = options ? options.body.id : ulid();
 
     try {
