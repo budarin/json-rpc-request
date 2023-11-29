@@ -109,7 +109,7 @@ export const createRequest =
                 };
             }
 
-            const data = response.json();
+            const data = await response.json();
 
             if (!validateResponse<T, U>(data)) {
                 throw new Error('Структура данных в ответе сервера не соответствует формату JSON-RPC');
