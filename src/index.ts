@@ -17,10 +17,10 @@ type DeepReadonlyObject<T> = {
 
 export type Url = string;
 
-export type JsonRpcRequest<P> = {
+export type JsonRpcRequest<P = undefined> = {
     id: string | number;
     method: string;
-    params: P;
+    params?: P;
 };
 
 export type JsonRpcError<U> = {

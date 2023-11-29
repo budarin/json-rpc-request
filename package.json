@@ -1,6 +1,6 @@
 {
   "name": "@budarin/json-rpc-request",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "repository": {
     "url": "git+https://github.com/budarin/json-rpc-request.git"
   },
