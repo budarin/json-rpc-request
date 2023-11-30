@@ -127,3 +127,5 @@ export const createRequest =
             };
         }
     };
+
+export type Request = ReturnType<typeof createRequest>;
