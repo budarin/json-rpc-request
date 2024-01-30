@@ -30,7 +30,7 @@ export type JsonRpcError<U> = {
     stack?: string;
 };
 
-export type JsonRpcResponse<T, U> =
+export type JsonRpcResponse<T, U = any> =
     | {
           id: string | number;
           result: DeepReadonly<T>;
@@ -127,3 +127,5 @@ export const createRequest =
             };
         }
     };
+
+export type Request = ReturnType<typeof createRequest>;
