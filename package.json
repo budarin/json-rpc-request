@@ -21,6 +21,6 @@
         "upgrade deps": "yarn upgrade-interactive --latest;"
     },
     "devDependencies": {
-        "typescript": "^5.4.3"
+        "typescript": "^5.4.5"
     }
 }
