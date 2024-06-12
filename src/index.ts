@@ -89,6 +89,7 @@ export const createRequest =
         try {
             const response = await fetch(`${baseUrl}/${options.body.method}`, {
                 ...options,
+                mode: 'same-origin',
                 method: 'POST',
                 body: JSON.stringify(options.body),
                 headers: {
