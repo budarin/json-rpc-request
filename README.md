@@ -12,6 +12,8 @@ yarn add @budarin/json-rpc-request
 
 ## Usage
 
+### Basic Usage
+
 ```ts
 import { createRequest } from '@budarin/json-rpc-request';
 
@@ -63,6 +65,36 @@ console.log(result);
 //     }
 // }
 ```
+
+### Configuration Options
+
+You can configure the request behavior by passing options to `createRequest`:
+
+```ts
+import { createRequest } from '@budarin/json-rpc-request';
+
+// Include cookies with requests (useful for authentication)
+const apiRequest = createRequest('http://domain/api', {
+    credentials: 'include',
+});
+
+// Or use same-origin policy (default behavior)
+const apiRequest = createRequest('http://domain/api', {
+    credentials: 'same-origin',
+});
+
+// Or never send cookies
+const apiRequest = createRequest('http://domain/api', {
+    credentials: 'omit',
+});
+```
+
+#### Available Options
+
+-   `credentials` - Controls cookie sending behavior:
+    -   `'include'` - Always send cookies with requests (useful for cross-origin authenticated requests)
+    -   `'same-origin'` - Send cookies only for same-origin requests (default fetch behavior)
+    -   `'omit'` - Never send cookies
 
 ## License
 

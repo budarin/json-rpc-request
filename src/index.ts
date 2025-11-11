@@ -79,8 +79,12 @@ export function validateResponse<T, U>(data: any): data is JsonRpcResponse<T, U>
     return false;
 }
 
+export type CreateRequestOptions = {
+    credentials?: RequestCredentials;
+};
+
 export const createRequest =
-    (baseUrl: Url) =>
+    (baseUrl: Url, config?: CreateRequestOptions) =>
     async <P, T, U = any>(
         options: Omit<RequestInit, 'body' | 'method'> & { body: JsonRpcRequest<P> },
     ): Promise<JsonRpcResponse<T, U>> => {
@@ -92,6 +96,7 @@ export const createRequest =
                 mode: 'same-origin',
                 method: 'POST',
                 body: JSON.stringify(options.body),
+                credentials: config?.credentials,
                 headers: {
                     ...options?.headers,
                     [xRequestId]: String(id),
