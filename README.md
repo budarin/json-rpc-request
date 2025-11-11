@@ -78,7 +78,7 @@ const apiRequest = createRequest('http://domain/api', {
     credentials: 'include',
 });
 
-// Or use same-origin policy (default behavior)
+// Or explicitly set same-origin policy (this is the default behavior)
 const apiRequest = createRequest('http://domain/api', {
     credentials: 'same-origin',
 });
@@ -93,7 +93,7 @@ const apiRequest = createRequest('http://domain/api', {
 
 -   `credentials` - Controls cookie sending behavior:
     -   `'include'` - Always send cookies with requests (useful for cross-origin authenticated requests)
-    -   `'same-origin'` - Send cookies only for same-origin requests (default fetch behavior)
+    -   `'same-origin'` - Send cookies only for same-origin requests (default fetch behavior - cookies are sent automatically for same-origin requests)
     -   `'omit'` - Never send cookies
 
 ## License
