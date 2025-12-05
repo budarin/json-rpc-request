@@ -43,6 +43,7 @@ export type JsonRpcResponse<T, U = any> =
       };
 
 export const UNEXPECTED_ERROR_CODE = -1;
+export const ABORTED_ERROR_CODE = -2;
 
 const xRequestId = 'x-request-id';
 const appJson = 'application/json; charset=utf-8';
@@ -123,6 +124,17 @@ export const createRequest =
 
             return data;
         } catch (error) {
+            // Отмена запроса - возвращаем специальный код ошибки
+            if (error instanceof Error && error.name === 'AbortError') {
+                return {
+                    id,
+                    error: {
+                        code: ABORTED_ERROR_CODE,
+                        message: 'Request aborted',
+                    },
+                };
+            }
+
             return {
                 id,
                 error: {
